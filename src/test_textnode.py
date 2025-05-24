@@ -1,4 +1,4 @@
-from typing_extensions import Text
+
 import unittest
 
 from textnode import TextNode, TextType

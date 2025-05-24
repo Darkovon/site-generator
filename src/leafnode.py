@@ -1,4 +1,4 @@
-from htmlnode import HTMLNode
+
 
 class LeafNode(HTMLNode):
     def __init__(self, tag, value, props=None):
@@ -8,18 +8,26 @@ class LeafNode(HTMLNode):
             raise ValueError("LeafNode tag cannot be empty")
         super().__init__(tag=tag, value=value, children=None, props=props)
 
-
-# TODO: Step 2 of the boot.dev leafnode lesson. We need to figure out how to close the tags.
-
     def to_html(self):
         if not self.value:
             raise ValueError("LeafNode value cannot be None")
-        if tag == None or tag == "":
+        if self.tag == None:
             return self.value
 
-# Create out opening and closing HTML tags   
-        opening_tag = f"<{tag}>"
-        closing_tag = f"</{tag}>"
+# Create our opening and closing HTML tags
+        opening_tag = f"<{self.tag}>"
+        closing_tag = f"</{self.tag}>"
+
+# Handle props
+        if self.props != None:
+            prop_list = self.props.keys()
+            open_prop_string = f"<{self.tag} "
+            open_prop_string += " ".join([f'{key}="{self.props[key]}"' for key in prop_list])
+            open_prop_string += ">"
+            open_prop_string += f"{self.value}{closing_tag}"
+            return open_prop_string
+        return f"{opening_tag}{self.value}{closing_tag}"
 
 
-        return f"{tag}{value}"
+node = LeafNode("div", "Hello", {"id": "greeting", "class": "salutation"})
+print(node.to_html())
