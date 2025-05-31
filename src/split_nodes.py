@@ -1,21 +1,26 @@
-from enum import Enum
-from typing import List
 from textnode import *
 
-def split_nodes_delimiter(old_nodes: List, delimiter: str, text_type: TextType) -> List[TextNode]:
-    node_list = []
+
+def split_nodes_delimiter(old_nodes, delimiter, text_type):
+    delimited_nodes = []
     for node in old_nodes:
-        if text_type != TextType.TEXT:
-            node_list.append(node)
+        if node.text_type != TextType.TEXT:
+            delimited_nodes.append(node)
+            continue
+        sections = node.text.split(delimiter)
+        split_sections = []
+        if len(sections) % 2 == 0:
+            raise ValueError("Invalid Markdown: Delimiter must close")
+        for i in range(len(sections)):
+            if i % 2 == 0:
+                split_sections.append(TextNode(sections[i], TextType.TEXT))
+            else:
+                split_sections.append(TextNode(sections[i], text_type))
+        delimited_nodes.extend(split_sections)
+    return delimited_nodes
 
- #       if delimiter == '**':
-
-    return node_list
 
 
-test_nodes = ["This is text with a **bolded phrase** in the middle"]
-
-print(split_nodes_delimiter(test_nodes, "**", TextType.TEXT))
-
-result = test_nodes[0].index("**")
-print(result)
+node = TextNode("This is text with a `code block` word", TextType.TEXT)
+new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
+print(new_nodes)
