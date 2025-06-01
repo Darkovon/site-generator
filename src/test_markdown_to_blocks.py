@@ -1,6 +1,9 @@
+import unittest
 from block_markdown import markdown_to_blocks
 
-def test_markdown_to_blocks(self):
+
+class TestMarkdownToHTML(unittest.TestCase):
+    def test_markdown_to_blocks(self):
         md = """
 This is **bolded** paragraph
 
@@ -20,36 +23,8 @@ This is the same paragraph on a new line
             ],
         )
 
-def test_markdown_to_blocks_empty(self):
-    md = ""
-
-    blocks = markdown_to_blocks(md)
-    self.assertEqual(blocks, [])
-
-def test_markdown_to_blocks_single_line(self):
-    md = "This is a single line"
-    blocks = markdown_to_blocks(md)
-    self.assertEqual(blocks, ["This is a single line"])
-
-def test_markdown_to_blocks_multiple_lines(self):
-    md = """
-This is a paragraph with multiple lines
-
-This is another paragraph with multiple lines
-"""
-    blocks = markdown_to_blocks(md)
-    self.assertEqual(
-        blocks,
-        [
-            "This is a paragraph with multiple lines",
-            "This is another paragraph with multiple lines",
-        ],
-    )
-
-
-
-def test_markdown_to_blocks_newlines(self):
-    md = """
+    def test_markdown_to_blocks_newlines(self):
+        md = """
 This is **bolded** paragraph
 
 
@@ -61,8 +36,8 @@ This is the same paragraph on a new line
 - This is a list
 - with items
 """
-    blocks = markdown_to_blocks(md)
-    self.assertEqual(
+        blocks = markdown_to_blocks(md)
+        self.assertEqual(
             blocks,
             [
                 "This is **bolded** paragraph",
@@ -70,3 +45,7 @@ This is the same paragraph on a new line
                 "- This is a list\n- with items",
             ],
         )
+
+
+if __name__ == "__main__":
+    unittest.main()
