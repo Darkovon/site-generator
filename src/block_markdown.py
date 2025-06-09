@@ -118,7 +118,7 @@ def unordered_list(text):
     for line in lines:
         cleaned_lines.append(line.strip("- "))
     for cleaned_line in cleaned_lines:
-        nodes.append(HTMLNode("li", None, text_to_children(cleaned_line)))
+        nodes.append(ParentNode("li", text_to_children(cleaned_line)))
     return nodes
 
 def ordered_list(text):
@@ -128,7 +128,7 @@ def ordered_list(text):
     for line in lines:
         cleaned_lines.append(line.split(". ")[1])
     for cleaned_line in cleaned_lines:
-        nodes.append(HTMLNode("li", None, text_to_children(cleaned_line)))
+        nodes.append(ParentNode("li", text_to_children(cleaned_line)))
     return nodes
 
 def text_to_children(text):

@@ -1,10 +1,13 @@
 from textnode import *
+from file_copy import *
 
 def main():
 
-    textnode = TextNode("Hello", TextType.TEXT, "boot.dev")
+    dst = "public/"
+    src = "static/"
+    file_copy(src, dst)
 
-    print(textnode)
+    generate_path("content/index.md", "template.html", "public/index.html")
+
 
 main()
-
