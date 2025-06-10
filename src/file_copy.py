@@ -36,7 +36,7 @@ def extract_title(markdown):
             return line[2:].strip()
     raise Exception("H1 not found")
 
-def generate_path(from_path, template_path, dest_path):
+def generate_path(from_path, template_path, dest_path, basepath="/"):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
     with open(from_path, "r") as content:
         read_content = content.read()
@@ -47,12 +47,14 @@ def generate_path(from_path, template_path, dest_path):
     title = extract_title(read_content)
     title_update = read_template.replace("{{ Title }}", title)
     completed_updates = title_update.replace("{{ Content }}", html)
+    final_html = completed_updates.replace('href="/', f'href="{basepath}')
+    final_html = final_html.replace('src="/', f'src="{basepath}')
     if not os.path.exists(dest_path):
         os.makedirs(os.path.dirname(dest_path), exist_ok=True)
     with open(dest_path, "w") as new_html:
-        new_html.write(completed_updates)
+        new_html.write(final_html)
 
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, basepath="/"):
     if os.path.isfile(dir_path_content):
         generate_path(dir_path_content, template_path, dest_dir_path)
     else:
