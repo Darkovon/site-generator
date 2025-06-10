@@ -2,6 +2,7 @@ import os
 import shutil
 from htmlnode import *
 from block_markdown import *
+from pathlib import Path
 
 dst = "public/"
 src = "static/"
@@ -37,7 +38,7 @@ def extract_title(markdown):
 
 def generate_path(from_path, template_path, dest_path):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
-    with open("content/index.md", "r") as content:
+    with open(from_path, "r") as content:
         read_content = content.read()
     with open(template_path, "r") as template:
         read_template = template.read()
@@ -50,3 +51,18 @@ def generate_path(from_path, template_path, dest_path):
         os.makedirs(os.path.dirname(dest_path), exist_ok=True)
     with open(dest_path, "w") as new_html:
         new_html.write(completed_updates)
+
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+    if os.path.isfile(dir_path_content):
+        generate_path(dir_path_content, template_path, dest_dir_path)
+    else:
+        files = os.listdir(dir_path_content)
+        for file in files:
+            new_dest = os.path.join(dest_dir_path, file)
+            new_source = os.path.join(dir_path_content, file)
+            if os.path.isdir(new_source):
+                os.makedirs(new_dest)
+                generate_pages_recursive(new_source, template_path, new_dest)
+            else:
+                final_dest = new_dest.replace(".md", ".html")
+                generate_path(new_source, template_path, final_dest)
