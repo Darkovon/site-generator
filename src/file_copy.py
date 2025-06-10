@@ -45,10 +45,13 @@ def generate_path(from_path, template_path, dest_path, basepath="/"):
     node = markdown_to_html_node(read_content)
     html = node.to_html()
     title = extract_title(read_content)
+
     title_update = read_template.replace("{{ Title }}", title)
     completed_updates = title_update.replace("{{ Content }}", html)
+
     final_html = completed_updates.replace('href="/', f'href="{basepath}')
     final_html = final_html.replace('src="/', f'src="{basepath}')
+
     if not os.path.exists(dest_path):
         os.makedirs(os.path.dirname(dest_path), exist_ok=True)
     with open(dest_path, "w") as new_html:
